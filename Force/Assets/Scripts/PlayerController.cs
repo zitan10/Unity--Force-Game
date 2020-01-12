@@ -6,23 +6,33 @@ public class PlayerController : MonoBehaviour {
     public Camera PlayerCam;
 
     private float speed;
+
     [SerializeField]
     private float lookSensitivity = 5f;
 
-    private float jumpSpeed = 10f;
+    private float jumpForce = 25f;
 
     private PlayerMotor motor;
+
+    private Rigidbody rb;
+
+    private bool grounded;
+
+    new Animator animation;
+
+    public GameObject player_base;
 
     private void Start()
     {
         motor = GetComponent<PlayerMotor>();
+        rb = GetComponent<Rigidbody>();
+        animation = player_base.GetComponent<Animator>();
     }
 
     private void Update()
     {
-     
         //Check if player wants to sprint
-        speed = Input.GetKey(KeyCode.LeftShift) ? 10f : 5f;
+        speed = Input.GetKey(KeyCode.LeftShift) ? 20f : 5f;
 
         //Calculate movement velocity as a 3D vector
         float xMov = Input.GetAxisRaw("Horizontal");
@@ -30,21 +40,42 @@ public class PlayerController : MonoBehaviour {
 
         Vector3 movHorizontal = transform.right * xMov;
         Vector3 movVertical = transform.forward * zMov;
-        Vector3 movUp;
 
-        if (Input.GetKey(KeyCode.Space))
+        //Animation Control
+        //Jump animation
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            //Jump Speed
-            movUp = transform.up * jumpSpeed;
+            animation.SetBool("isIdle", false);
+            animation.SetBool("isWalk", false);
+            animation.SetBool("isJump", true);
+            animation.SetBool("isPush", false);
         }
-        //Don't Jump
+        else if (Input.GetButtonDown("Fire1"))
+        {
+            animation.SetBool("isWalk", false);
+            animation.SetBool("isIdle", false);
+            animation.SetBool("isJump", false);
+            animation.SetBool("isPush", true);
+        }
+        //Walk Animation
+        else if (xMov != 0 || zMov != 0)
+        {
+            animation.SetBool("isWalk", true);
+            animation.SetBool("isIdle", false);
+            animation.SetBool("isJump", false);
+            animation.SetBool("isPush", false);
+        }
+        //Walk animations
         else
         {
-            movUp = transform.up * 0;
+            animation.SetBool("isWalk", false);
+            animation.SetBool("isIdle", true);
+            animation.SetBool("isJump", false);
+            animation.SetBool("isPush", false);
         }
 
         //Final movement vector
-        Vector3 velocity = (movHorizontal + movVertical + movUp).normalized * speed;
+        Vector3 velocity = (movHorizontal + movVertical).normalized * speed;
 
         //Apply movement
         motor.Move(velocity);
@@ -58,12 +89,12 @@ public class PlayerController : MonoBehaviour {
         motor.Rotate(rotation);
 
         //Calculate camera as a 3D vector (turning around)
-        float xRot = Input.GetAxisRaw("Mouse Y");
+        //float xRot = Input.GetAxisRaw("Mouse Y");
 
-        Vector3 cameraRotation = new Vector3(xRot, 0f, 0f) * lookSensitivity;
+        //Vector3 cameraRotation = new Vector3(xRot, 0f, 0f) * lookSensitivity;
 
         //Apply rotation
-        motor.RotateCamera(cameraRotation);
+        //motor.RotateCamera(cameraRotation);
 
     }
 
