@@ -12,6 +12,7 @@ Force Slam Attack + Force Push Attack
 ![](images/preview2.gif)
 
 To Do: 
+
 Enemy AI
 
 Force Pull
@@ -19,6 +20,7 @@ Force Pull
 Force Freeze
 
 Environment
+
 
 Assets Used (Character Models + animations):
 
