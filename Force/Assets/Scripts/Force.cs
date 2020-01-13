@@ -31,11 +31,13 @@ public class Force : MonoBehaviour {
         //Player jump force attack
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            //To Do: Replace StartCoroutine time delay with AnimationsEvent
             StartCoroutine(JumpAttack());
         }
         //Force Push Enemies
         else if (Input.GetButtonDown("Fire1"))
         {
+            // To Do: Replace StartCoroutine time delay with AnimationsEvent
             StartCoroutine(PushAttack());
         }
         else 
@@ -65,12 +67,13 @@ public class Force : MonoBehaviour {
         }
     }
 
+    //To Do: Replace time delay with AnimationsEvent
     private IEnumerator JumpAttack()
     {
         yield return new WaitForSeconds(2.5f);
         foreach (GameObject enemy in enemies)
         {
-            if (!animation.GetBool("isJump"))
+            if (animation.GetCurrentAnimatorStateInfo(0).IsName("Jump"))
             {
                 rb = enemy.GetComponent<Rigidbody>();
                 rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
@@ -80,6 +83,7 @@ public class Force : MonoBehaviour {
         }
     }
 
+    //To Do: Replace time delay with AnimationsEvent
     private IEnumerator PushAttack()
     {
         yield return new WaitForSeconds(1.65f);

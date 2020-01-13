@@ -42,6 +42,8 @@ public class PlayerController : MonoBehaviour {
         Vector3 movVertical = transform.forward * zMov;
 
         //Animation Control
+        //NOTE- TO DO: Move animation controls to an animation class: Animation.cs
+
         //Jump animation
         if (Input.GetKeyDown(KeyCode.Space))
         {
